@@ -1,1 +1,1 @@
-web: gunicorn api:fuelbook-api
+web: gunicorn api:api
