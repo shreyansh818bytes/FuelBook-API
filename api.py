@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 import re
 
 app = flask.Flask(__name__)
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 
 
 # Scrape the data
-def get_data(url, district_name):
+def get_data(url, district_name, fuel_type):
     r = requests.get(url)
     html_data = r.text
     soup = BeautifulSoup(html_data, 'html.parser')
@@ -36,11 +36,12 @@ def get_data(url, district_name):
 
     result_json = {
         'district': result_items[0],
-        'current_price': {
+        'price_current': {
             'value': result_items[1][0],
             'unit': result_items[1][1]
         },
-        'change_in_price': result_items[2]
+        'price_change': result_items[2],
+        'fuel_type': fuel_type
     }
 
     return result_json
@@ -77,7 +78,8 @@ def return_data():
         state_name = request.args['state']
         try:
             response = get_data(f"https://www.ndtv.com/fuel-prices/{fuel_type}-price-in-{state_name}-state",
-                                district_name)
+                                district_name,
+                                fuel_type)
         except IndexError:
             response = {
                 "error": {
