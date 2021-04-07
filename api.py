@@ -9,29 +9,39 @@ app.config['DEBUG'] = True
 
 
 # Scrape the data
-def get_data(url):
+def get_data(url, district_name):
     r = requests.get(url)
     html_data = r.text
     soup = BeautifulSoup(html_data, 'html.parser')
 
-    result_date_block = soup.find_all("div", class_="fuel-block-date")
-    result_date_block = re.findall(".\d+\.\d+", str(result_date_block))
-    result_date_block = [x if x[0] == '-' else x[1:] for x in result_date_block]
+    result_table = soup.find_all("div", class_="tbl-container b_rad4 overflow-hidden")
+    result_table = result_table[0].find_all("tr")
 
-    result_details_block = soup.find_all("div", class_="fuel-block-details")
-    result_details_block = re.findall(".\d+\.\d+", str(result_details_block))
-    result_details_block = [x if x[0] == '-' else x[1:] for x in result_details_block]
+    result_items = []
+    for item in result_table[1:]:
+        row_items = item.find_all('td')
+        row_items[0] = re.findall('">.*.</a', str(row_items[0]))[0][2:-3]
+        row_items[0] = row_items[0].lower().replace(' ', '-')
+        if district_name in row_items[0]:
+            row_items[1] = [float(re.findall(">.*. ", str(row_items[1]))[0][1:-1]),
+                            re.findall(" .*.<", str(row_items[1]))[0][1:-1].replace('₹', 'Rs')]
+            row_items.append(re.findall('up|down', str(row_items[2]))[0])
+            row_items[2] = float(re.findall('">.*.</s', str(row_items[2]))[0][2:-3])
+            if row_items[3] == 'up':
+                row_items[2] = -row_items[2]
+            row_items = row_items[:-1]
+            result_items.append(row_items)
 
-    result_json = dict()
-    if len(result_date_block):
-        result_json['price_change'] = float(result_date_block[0])
-        result_json['price_current'] = float(result_details_block[0])
-    else:
-        result_json['price_current'] = float(result_details_block[0])
-        if len(result_details_block) == 2:
-            result_json['price_change'] = float(result_details_block[1])
-        else:
-            result_json['price_change'] = float(0)
+    result_items = result_items[0]
+
+    result_json = {
+        'district': result_items[0],
+        'current_price': {
+            'value': result_items[1][0],
+            'unit': result_items[1][1]
+        },
+        'change_in_price': result_items[2]
+    }
 
     return result_json
 
@@ -42,27 +52,32 @@ def home():
     <p><h3>This api is created for FuelBook Android App project to scrape fuel price data district wise.<br> 
     Support for Indian cities only</h3>
     <b>Developer's Instructions:</b><br>
-    &emsp;&emsp;* API is at /api/v1/fuelprice<br>
-    &emsp;&emsp;* Parameters required : fType (Type of fuel [petrol, diesel, lpg])<br>
+    &emsp;&emsp;* API is at /api/fuel-price/city<br>
+    &emsp;&emsp;* Parameters required : fType (Type of fuel [petrol, diesel])<br>
     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;district (Name of the District)<br>
-    &emsp;&emsp;* Return Example: {<br>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;price_current: 89.01,<br>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;price_change: -0.20<br>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br><br>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;state (Name of the State)<br>
+    &emsp;&emsp;* API Request Example: <a 
+    href='https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai'>
+        /api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai
+    </a>
+    <br>
+    <br>
     <br>
     Android App: Under Development...<br>
     Contact Developer: <a href='mailto:shr818bytes@gmail.com'>shr818bytes@gmail.com</a></p>
     <br><br><br>
-    <h5>Data Source: <a href='https://www.goodreturns.in/'>goodreturns Website</a></h5>'''
+    <h5>Data Source: <a href='https://www.ndtv.com/'>NDTV Website</a></h5>'''
 
 
-@app.route('/api/v1/fuelprice', methods=['GET'])
+@app.route('/api/fuel-price/city', methods=['GET'])
 def return_data():
-    if 'fType' in request.args and 'district' in request.args:
+    if 'fType' in request.args and 'district' in request.args and 'state' in request.args:
         fuel_type = request.args['fType']
-        district_name = request.args['district']
+        district_name = request.args['district'].lower().replace(' ', '-')
+        state_name = request.args['state']
         try:
-            response = get_data(f"https://www.goodreturns.in/{fuel_type}-price-in-{district_name}.html")
+            response = get_data(f"https://www.ndtv.com/fuel-prices/{fuel_type}-price-in-{state_name}-state",
+                                district_name)
         except IndexError:
             response = {
                 "error": {
