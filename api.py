@@ -39,18 +39,21 @@ def get_data(url):
 @app.route('/', methods=['GET'])
 def home():
     return '''<h1>FuelBook API</h1>
-    <p><h3>This api is created for FuelBook Android App project to scrape fuel price data in India.</h3><br>
-    <b>Developer Instructions:</b><br>
-        * API is at /api/v1/price<br>
-        * Parameters required : fType (Type of fuel [petrol, diesel, lpg])<br>
-                                district (Name of the District)<br>
-        * Return Example: {<br>
-                                price_current: 89.01,<br>
-                                price_change: -0.20<br>
-                          }<br>
-    Source Website: https://www.goodreturns.in/<br>
-    Android App: <br>
-    Contact Developer: shr818bytes@gmail.com</p>'''
+    <p><h3>This api is created for FuelBook Android App project to scrape fuel price data district wise.<br> 
+    Support for Indian cities only</h3>
+    <b>Developer's Instructions:</b><br>
+    &emsp;&emsp;* API is at /api/v1/fuelprice<br>
+    &emsp;&emsp;* Parameters required : fType (Type of fuel [petrol, diesel, lpg])<br>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;district (Name of the District)<br>
+    &emsp;&emsp;* Return Example: {<br>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;price_current: 89.01,<br>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;price_change: -0.20<br>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br><br>
+    <br>
+    Android App: Under Development...<br>
+    Contact Developer: <a href='mailto:shr818bytes@gmail.com'>shr818bytes@gmail.com</a></p>
+    <br><br><br>
+    <h5>Data Source: <a href='https://www.goodreturns.in/'>goodreturns Website</a></h5>'''
 
 
 @app.route('/api/v1/fuelprice', methods=['GET'])
