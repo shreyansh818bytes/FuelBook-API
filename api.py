@@ -27,7 +27,7 @@ def get_data(url, district_name, fuel_type):
                             re.findall(" .*.<", str(row_items[1]))[0][1:-1].replace('₹', 'Rs')]
             row_items.append(re.findall('up|down', str(row_items[2]))[0])
             row_items[2] = float(re.findall('">.*.</s', str(row_items[2]))[0][2:-3])
-            if row_items[3] == 'up':
+            if row_items[3] == 'up' and row_items[2]:
                 row_items[2] = -row_items[2]
             row_items = row_items[:-1]
             result_items.append(row_items)
