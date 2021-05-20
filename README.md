@@ -1,5 +1,5 @@
 # fuelbook-api
-API for the FuelBook Android App Project
+API for the FuelBook App Project
 
 # Description
 This API is built to get the latest fuel prices of different districts in India.
