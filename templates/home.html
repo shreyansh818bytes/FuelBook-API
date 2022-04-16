@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FuelBook API Documentation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="./static/home.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+        $(function () {
+            var currentHash = "#Introduction"
+            $(document).scroll(function () {
+                $('.main-section').each(function () {
+                    var top = window.pageYOffset;
+                    var distance = top - $(this).offset().top;
+                    var hash = `#${$(this).attr('id')}`;
+                    // 30 is an arbitrary padding choice, 
+                    // if you want a precise check then use distance===0
+                    if (distance < 30 && distance > -30 && currentHash != hash) {
+                        window.location.hash = (hash);
+                        currentHash = hash;
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            $('#section-dropdown').change(function() {
+                value = $(this).val();
+                if (value != '') {
+                    window.location.href=value;
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <nav id="navbar">
+        <header>FuelBook API</header>
+        <select id="section-dropdown">
+            <option value="#Introduction">Introduction</option>
+            <option value="#API_Endpoints">API Endpoints</option>
+            <option value="#Examples">Examples</option>
+            <option value="#Reference">Reference</option>
+        </select>
+        <ul id="section-selector">
+        <li><a class="nav-link" href="#Introduction">Introduction</a></li>
+        <li id="collapsible-list">
+            <a class="nav-link" href="#API_Endpoints">API Endpoints</a>
+            <ul id="sub-list">
+                <li id="sub-list-item"><a class="nav-link" href="#Fetch_fuel-price">Fetch fuel-price</a></li>
+            </ul>
+        </li>
+        <li><a class="nav-link" href="#Examples">Examples</a></li>
+        <li><a class="nav-link" href="#Reference">Reference</a></li>
+        </ul>
+    </nav>
+    
+    <main id="main-doc">
+        <section class="main-section" id="Introduction">
+        <header>Introduction</header>
+        <article>
+            <p>This API is an open-source project developed by <a id="github" class="external-link" href="https://github.com/shreyansh818bytes" target="_blank">shr818bytes</a>. It can be used to quickly fetch the latest fuel prices of Indian districts.</p>
+    
+            <p>It has been built using <a class="external-link" href="https://pypi.org/project/beautifulsoup4/" target="_blank">beautifulsoup4</a> and <a class="external-link" href="https://flask.palletsprojects.com/en/1.1.x/" target="_blank">Flask</a> libraries on.</p>
+            
+            <p>To integrate the API within your project successfully, read the documentation carefully.</p>
+        </article>
+        </section>
+        <section class="main-section" id="API_Endpoints">
+            <header>API Endpoints</header>
+            <article>
+                <section class="endpoint" id="Fetch_fuel-price">
+                    <header class="endpoint-title">Fetch fuel-price</header>
+                    <code
+                    ><span class="code-header">PATH</span>
+                    <span id="get-method">GET</span> /api/fuel-price/city</code>
+            
+                    <code
+                    ><span class="code-header">PARAMS</span>
+                    ?ftype=fuel-type : Type of fuel ([petrol, diesel])
+                    ?state=state-name : Name of the State
+                    ?district=district-name : Name of the District
+                    </code>
+                    
+                    <code><span class="code-header">RESPONSE</span>
+<pre>{
+    "district":"district-name",
+    "fuel-type":"petrol",
+    "price_change":0.00,
+    "price_current":{
+        "unit":"Rs/L",
+        "value":0.00
+    }
+}</pre></code>
+                    <p class="note">"price_change" field will be <span id="increased">+ve</span> if the fuel price has <span id="increased">increased</span> from yesterday and <span id="decreased">-ve</span> if it has <span id="decreased">decreased</span>.</p>
+                </section>
+            </article>
+        </section>
+
+        <section class="main-section" id="Examples">
+            <header>Examples</header>
+            <article>
+                <header class="endpoint-title">Fetch fuel-price</header>
+                    <code
+                    ><span class="code-header">QUERY</span>
+                    <span id="get-method">GET</span> <a href="https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai">https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai</a></code>
+            
+                    <code
+                    ><span class="code-header">PARAMS</span>
+                    ftype=petrol
+                    state=maharashtra
+                    district=greater-mumbai
+                    </code>
+                    
+                    <code><span class="code-header">RESPONSE</span>
+<pre>{
+    "district":"greater-mumbai",
+    "fuel_type":"petrol",
+    "price_change":0.12,
+    "price_current":{
+        "unit":"Rs/L","value":120.63
+    }
+}</pre></code>
+            </article>
+        </section>
+        <section class="main-section" id="Reference">
+        <header>Reference</header>
+        <article>
+            <ul>
+            <li>
+                All the data of fuel prices is being taken from
+                <a
+                class="external-link"
+                href="https://www.ndtv.com/fuel-prices"
+                target="_blank"
+                >NDTV Fuel Prices Website</a
+                >
+            </li>
+            </ul>
+        </article>
+        </section>
+    </main>
+</body>
+</html>

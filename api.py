@@ -1,15 +1,15 @@
-import flask
-from flask import request, jsonify
+from flask import Flask, request, jsonify, render_template
 import requests
 from bs4 import BeautifulSoup
 import re
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config['DEBUG'] = False
 
 
 # Scrape the data
 def get_data(url, district_name, fuel_type):
+    # fetch raw data
     r = requests.get(url)
     html_data = r.text
     soup = BeautifulSoup(html_data, 'html.parser')
@@ -17,6 +17,7 @@ def get_data(url, district_name, fuel_type):
     result_table = soup.find_all("div", class_="tbl-container b_rad4 overflow-hidden")
     result_table = result_table[0].find_all("tr")
 
+    # extract usefull data
     result_items = []
     for item in result_table[1:]:
         row_items = item.find_all('td')
@@ -49,25 +50,7 @@ def get_data(url, district_name, fuel_type):
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>FuelBook API</h1>
-    <p><h3>This api is created for FuelBook Android App project to scrape fuel price data district wise.<br> 
-    Support for Indian cities only</h3>
-    <b>Developer's Instructions:</b><br>
-    &emsp;&emsp;* API is at /api/fuel-price/city<br>
-    &emsp;&emsp;* Parameters required : fType (Type of fuel [petrol, diesel])<br>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;district (Name of the District)<br>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;state (Name of the State)<br>
-    &emsp;&emsp;* API Request Example: <a 
-    href='https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai'>
-        /api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai
-    </a>
-    <br>
-    <br>
-    <br>
-    Android App: Under Development...<br>
-    Contact Developer: <a href='mailto:shr818bytes@gmail.com'>shr818bytes@gmail.com</a></p>
-    <br><br><br>
-    <h5>Data Source: <a href='https://www.ndtv.com/'>NDTV Website</a></h5>'''
+    return render_template('home.html')
 
 
 @app.route('/api/fuel-price/city', methods=['GET'])
