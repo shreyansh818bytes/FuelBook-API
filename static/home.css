@@ -37,10 +37,10 @@ header {
 .external-link:hover {
   text-decoration: underline;
 }
-#github {
+.github {
   padding-left: 22px;
 }
-#github:before {
+.github:before {
   content: '';
   background: url("./icons/github.png");
   background-size:cover;
