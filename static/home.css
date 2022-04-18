@@ -24,16 +24,6 @@ header {
   text-decoration: none;
   width: max-content;
 }
-.external-link::after{
-  content: '';
-  background:url('./icons/exit-top-right.png');
-  background-size:cover;
-      position:absolute;
-  width: 14px;
-  height: 14px;
-  margin-top: 4px;
-  margin-left: 5px;
-}
 .external-link:hover {
   text-decoration: underline;
 }
@@ -46,7 +36,12 @@ header {
   text-decoration: none;
   width: max-content;
 }
-.external-link-github::after{
+.external-link-github:hover {
+  text-decoration: underline;
+}
+
+
+a.external-link::after{
   content: '';
   background:url('./icons/exit-top-right.png');
   background-size:cover;
@@ -56,7 +51,7 @@ header {
   margin-top: 4px;
   margin-left: 5px;
 }
-.external-link-github::before {
+a.external-link-github::before {
   content: '';
   background: url("./icons/github.png");
   background-size:cover;
@@ -66,8 +61,15 @@ header {
   margin-top: 4px;
   margin-left: -17px;
 }
-.external-link-github:hover {
-  text-decoration: underline;
+a.external-link-github::after{
+  content: '';
+  background:url('./icons/exit-top-right.png');
+  background-size:cover;
+      position:absolute;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  margin-left: 5px;
 }
 
 /*Navigation Panel*/
