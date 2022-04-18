@@ -38,18 +38,36 @@ header {
   text-decoration: underline;
 }
 
-.github {
-  padding-left: 22px;
+.external-link-github {
+  color: white;
+  background-color: #db6d36;
+  padding: 2px 25px 2px 22px;
+  border-radius: 6px;
+  text-decoration: none;
+  width: max-content;
 }
-.github:before {
+.external-link-github:after{
+  content: '';
+  background:url('./icons/exit-top-right.png');
+  background-size:cover;
+      position:absolute;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  margin-left: 5px;
+}
+.external-link-github:before {
   content: '';
   background: url("./icons/github.png");
   background-size:cover;
-      position:absolute;
+  position:absolute;
   width: 15px;
   height: 15px;
   margin-top: 4px;
   margin-left: -17px;
+}
+.external-link-github:hover {
+  text-decoration: underline;
 }
 
 /*Navigation Panel*/
