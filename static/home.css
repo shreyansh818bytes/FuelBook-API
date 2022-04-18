@@ -24,7 +24,7 @@ header {
   text-decoration: none;
   width: max-content;
 }
-.external-link:after{
+.external-link::after{
   content: '';
   background:url('./icons/exit-top-right.png');
   background-size:cover;
@@ -46,7 +46,7 @@ header {
   text-decoration: none;
   width: max-content;
 }
-.external-link-github:after{
+.external-link-github::after{
   content: '';
   background:url('./icons/exit-top-right.png');
   background-size:cover;
@@ -56,7 +56,7 @@ header {
   margin-top: 4px;
   margin-left: 5px;
 }
-.external-link-github:before {
+.external-link-github::before {
   content: '';
   background: url("./icons/github.png");
   background-size:cover;
@@ -186,7 +186,7 @@ code > a {
   background-color: #fff5ef;
   border-radius: 4px;
 }
-.note:before {
+.note::before {
   content: 'Note';
   background-color: #ff653e;
   color: white;
@@ -219,7 +219,7 @@ code > a {
   padding-left: 40px;
   border-radius: 4px;
 }
-.endpoint-title:before {
+.endpoint-title::before {
   content: '';
   background: url("./icons/title.png");
   background-size:cover;
