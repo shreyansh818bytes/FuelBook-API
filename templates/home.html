@@ -32,6 +32,11 @@
                     window.location.href=value;
                 }
             });
+
+            var fuelPriceQueryUrl = `${window.location.protocol}//${window.location.host}/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai`;
+            var a = document.getElementById("fuel-price-query-url");
+            a.innerHTML = fuelPriceQueryUrl;
+            a.href = fuelPriceQueryUrl;
         });
     </script>
 </head>
@@ -107,7 +112,7 @@
                 <header class="endpoint-title">Fetch fuel-price</header>
                     <code
                     ><span class="code-header">QUERY</span>
-                    <span id="get-method">GET</span> <a href="https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai">https://fuelbook-api.herokuapp.com/api/fuel-price/city?fType=petrol&state=maharashtra&district=greater-mumbai</a></code>
+                    <span id="get-method">GET</span> <a id="fuel-price-query-url" href="#">#</a></code>
             
                     <code
                     ><span class="code-header">PARAMS</span>
