@@ -1,5 +1,5 @@
 # FuelBook-API
-API for the FuelBook App Project
+Open source Flask API
 
 # Description
 This API is built to get the latest fuel prices of different districts in India.
